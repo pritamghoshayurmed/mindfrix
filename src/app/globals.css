@@ -760,11 +760,11 @@ input {
   border-radius: 50%;
   filter: blur(140px);
   opacity: 0;
-  transition: opacity 1.8s ease;
+  animation: svMeshFadeIn 1.8s ease forwards;
 }
 
-.sv--revealed .sv-mesh-grad {
-  opacity: 1;
+@keyframes svMeshFadeIn {
+  to { opacity: 1; }
 }
 
 .sv-mesh-grad--1 {
@@ -844,13 +844,8 @@ input {
   background-clip: text;
   filter: drop-shadow(0 0 60px rgba(255, 80, 30, 0.35)) drop-shadow(0 0 120px rgba(255, 45, 45, 0.2));
   display: block;
-  transition: opacity 0.35s ease, transform 0.35s ease;
   user-select: none;
-}
-
-.sv-watermark-num--out {
-  opacity: 0;
-  transform: translateY(20px);
+  /* transitions driven by GSAP */
 }
 
 /* ---- CONTAINER ---- */
@@ -868,15 +863,6 @@ input {
   align-items: flex-end;
   justify-content: space-between;
   gap: 2rem;
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.sv--revealed .sv-head {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .sv-label {
@@ -922,15 +908,6 @@ input {
   grid-template-columns: 1fr 1.1fr;
   gap: 4rem;
   align-items: center;
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
-    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
-}
-
-.sv--revealed .sv-body {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* ---- LEFT: CONTENT AREA ---- */
@@ -939,13 +916,7 @@ input {
 }
 
 .sv-content-inner {
-  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.sv-content-inner--out {
-  opacity: 0;
-  transform: translateY(12px);
+  /* transitions driven by GSAP */
 }
 
 .sv-content-num {
@@ -1043,13 +1014,7 @@ input {
 .sv-visual-img {
   width: 100%;
   height: 100%;
-  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.sv-visual-img--out {
-  opacity: 0;
-  transform: scale(1.03);
+  /* transitions driven by GSAP */
 }
 
 .sv-visual-img img {
@@ -1065,15 +1030,6 @@ input {
   grid-template-columns: repeat(4, 1fr);
   gap: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s,
-    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
-}
-
-.sv--revealed .sv-tabs {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .sv-tab {
@@ -1135,33 +1091,37 @@ input {
   color: rgba(255, 255, 255, 0.55);
 }
 
-/* Tab top-bar indicator */
+/* Tab top-bar indicator + auto-play progress */
 .sv-tab-bar {
   position: absolute;
   top: -1px;
   left: 0;
   right: 0;
   height: 2px;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.05);
   overflow: hidden;
 }
 
-.sv-tab-bar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+/* Completed / past tabs show full filled bar */
+.sv-tab--past .sv-tab-bar {
   background: var(--gradient-primary);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.sv-tab--active .sv-tab-bar::after,
-.sv-tab--past .sv-tab-bar::after {
-  transform: scaleX(1);
+/* Auto-play fill — animates width from 0→100% over the duration */
+.sv-tab-bar-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--gradient-primary);
+}
+
+.sv-tab-bar-fill--run {
+  animation: svTabProgress var(--sv-duration, 4500ms) linear forwards;
+}
+
+@keyframes svTabProgress {
+  from { width: 0%; }
+  to   { width: 100%; }
 }
 
 /* ========================================

@@ -53,107 +53,119 @@ const servicesData = [
     },
 ];
 
+const AUTO_PLAY_DURATION = 4500;
+
 export default function Services() {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
     const sectionRef = useRef<HTMLElement>(null);
-    const pinnedRef = useRef<HTMLDivElement>(null);
-    const [isRevealed, setIsRevealed] = useState(false);
-    const prevIndexRef = useRef(0);
-    const [displayIndex, setDisplayIndex] = useState(0);
-    const [isTransitioning, setIsTransitioning] = useState(false);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const imageRef = useRef<HTMLDivElement>(null);
+    const watermarkRef = useRef<HTMLSpanElement>(null);
+    const autoPlayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // GSAP ScrollTrigger pinning
+    // Entrance animation
     useEffect(() => {
-        if (!sectionRef.current || !pinnedRef.current) return;
-
+        if (!sectionRef.current) return;
         const ctx = gsap.context(() => {
-            ScrollTrigger.create({
-                trigger: sectionRef.current,
-                start: "top top",
-                end: `+=${window.innerHeight * 3.5}`,
-                pin: pinnedRef.current,
-                pinSpacing: true,
-                scrub: 0.5,
-                onUpdate: (self) => {
-                    const progress = self.progress;
-                    const totalItems = servicesData.length;
-                    const newIndex = Math.min(
-                        totalItems - 1,
-                        Math.floor(progress * totalItems)
-                    );
-                    setActiveIndex(newIndex);
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 75%",
+                    once: true,
                 },
             });
+            tl.from(".sv-head", { opacity: 0, y: 50, duration: 0.9, ease: "power3.out" })
+              .from(".sv-body", { opacity: 0, y: 40, duration: 0.85, ease: "power3.out" }, "-=0.55")
+              .from(".sv-tabs", { opacity: 0, y: 24, duration: 0.7, ease: "power3.out" }, "-=0.55");
         }, sectionRef);
-
         return () => ctx.revert();
     }, []);
 
-    // Entrance reveal
-    useEffect(() => {
-        if (!sectionRef.current) return;
-        const observer = new IntersectionObserver(
-            (entries) => {
-                if (entries[0].isIntersecting) {
-                    setIsRevealed(true);
-                    observer.disconnect();
-                }
-            },
-            { threshold: 0.05 }
-        );
-        observer.observe(sectionRef.current);
-        return () => observer.disconnect();
-    }, []);
+    // Core transition: out → swap state → in
+    const animateTransition = useCallback(
+        (nextIndex: number) => {
+            if (isAnimating || nextIndex === activeIndex) return;
+            setIsAnimating(true);
 
-    // Content transition
-    useEffect(() => {
-        if (activeIndex !== prevIndexRef.current) {
-            setIsTransitioning(true);
-            const timer = setTimeout(() => {
-                setDisplayIndex(activeIndex);
-                prevIndexRef.current = activeIndex;
-                setTimeout(() => setIsTransitioning(false), 50);
-            }, 250);
-            return () => clearTimeout(timer);
-        }
-    }, [activeIndex]);
+            const content = contentRef.current;
+            const img = imageRef.current;
+            const wm = watermarkRef.current;
 
-    const handleItemClick = useCallback(
-        (index: number) => {
-            if (index === activeIndex || !sectionRef.current) return;
-            const sectionTop =
-                sectionRef.current.getBoundingClientRect().top + window.scrollY;
-            const totalScroll = window.innerHeight * 3.5;
-            const targetScroll =
-                sectionTop + (index / servicesData.length) * totalScroll;
-            window.scrollTo({ top: targetScroll, behavior: "smooth" });
+            // — OUT —
+            const outTl = gsap.timeline({
+                onComplete: () => {
+                    setActiveIndex(nextIndex);
+                    // Use rAF so React has re-rendered new content before animating IN
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            const inTl = gsap.timeline({ onComplete: () => setIsAnimating(false) });
+                            inTl.fromTo(
+                                content,
+                                { opacity: 0, y: 28, filter: "blur(5px)" },
+                                { opacity: 1, y: 0,  filter: "blur(0px)", duration: 0.58, ease: "power3.out" },
+                                0
+                            )
+                            .fromTo(
+                                img,
+                                { opacity: 0, scale: 1.05, filter: "blur(8px)" },
+                                { opacity: 1, scale: 1,    filter: "blur(0px)", duration: 0.62, ease: "power3.out" },
+                                0.04
+                            )
+                            .fromTo(
+                                wm,
+                                { opacity: 0, y: 30 },
+                                { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" },
+                                0.08
+                            );
+                        });
+                    });
+                },
+            });
+            outTl.to(content, { opacity: 0, y: -20, filter: "blur(5px)", duration: 0.28, ease: "power2.in" }, 0);
+            outTl.to(img,     { opacity: 0, scale: 0.96, filter: "blur(8px)", duration: 0.28, ease: "power2.in" }, 0);
+            outTl.to(wm,      { opacity: 0, y: -20, duration: 0.22, ease: "power2.in" }, 0);
         },
-        [activeIndex]
+        [activeIndex, isAnimating]
     );
 
-    const activeService = servicesData[displayIndex];
+    // Auto-play
+    const scheduleNext = useCallback(() => {
+        if (autoPlayRef.current) clearTimeout(autoPlayRef.current);
+        autoPlayRef.current = setTimeout(() => {
+            animateTransition((activeIndex + 1) % servicesData.length);
+        }, AUTO_PLAY_DURATION);
+    }, [activeIndex, animateTransition]);
+
+    useEffect(() => {
+        scheduleNext();
+        return () => { if (autoPlayRef.current) clearTimeout(autoPlayRef.current); };
+    }, [activeIndex, scheduleNext]);
+
+    const handleTabClick = useCallback(
+        (index: number) => {
+            if (autoPlayRef.current) clearTimeout(autoPlayRef.current);
+            animateTransition(index);
+        },
+        [animateTransition]
+    );
+
+    const active = servicesData[activeIndex];
 
     return (
-        <section
-            className={`sv section ${isRevealed ? "sv--revealed" : ""}`}
-            id="services"
-            ref={sectionRef}
-        >
-            <div className="sv-pin" ref={pinnedRef}>
+        <section className="sv section" id="services" ref={sectionRef}>
+            <div className="sv-pin">
                 <div className="sv-noise" />
-
                 <div className="sv-mesh">
                     <div className="sv-mesh-grad sv-mesh-grad--1" />
                     <div className="sv-mesh-grad sv-mesh-grad--2" />
                     <div className="sv-mesh-grad sv-mesh-grad--3" />
                 </div>
 
-                {/* Large watermark number */}
+                {/* Watermark number */}
                 <div className="sv-watermark" aria-hidden="true">
-                    <span
-                        className={`sv-watermark-num ${isTransitioning ? "sv-watermark-num--out" : ""}`}
-                    >
-                        {activeService.num}
+                    <span className="sv-watermark-num" ref={watermarkRef}>
+                        {active.num}
                     </span>
                 </div>
 
@@ -175,80 +187,30 @@ export default function Services() {
                         </p>
                     </div>
 
-                    {/* Tab navigation */}
-                    <div className="sv-tabs">
-                        {servicesData.map((service, i) => (
-                            <button
-                                key={i}
-                                className={`sv-tab ${activeIndex === i ? "sv-tab--active" : ""} ${activeIndex > i ? "sv-tab--past" : ""}`}
-                                onClick={() => handleItemClick(i)}
-                            >
-                                <div className="sv-tab-inner">
-                                    <span className="sv-tab-num">{service.num}</span>
-                                    <span className="sv-tab-title">
-                                        {service.title}
-                                    </span>
-                                </div>
-                                <span className="sv-tab-bar" />
-                            </button>
-                        ))}
-                    </div>
-
                     {/* Body: content + image */}
                     <div className="sv-body">
                         <div className="sv-content">
-                            <div
-                                className={`sv-content-inner ${isTransitioning ? "sv-content-inner--out" : ""}`}
-                            >
-                                <span className="sv-content-num">
-                                    {activeService.num}
-                                </span>
-                                <h3 className="sv-content-title">
-                                    {activeService.title}
-                                </h3>
-                                <p className="sv-content-desc">
-                                    {activeService.desc}
-                                </p>
+                            <div className="sv-content-inner" ref={contentRef}>
+                                <span className="sv-content-num">{active.num}</span>
+                                <h3 className="sv-content-title">{active.title}</h3>
+                                <p className="sv-content-desc">{active.desc}</p>
                                 <div className="sv-content-list">
-                                    {activeService.impact.map((item, i) => (
+                                    {active.impact.map((item, i) => (
                                         <div key={i} className="sv-content-item">
                                             <span className="sv-content-check">
-                                                <svg
-                                                    width="14"
-                                                    height="14"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                >
-                                                    <path
-                                                        d="M20 6L9 17L4 12"
-                                                        stroke="url(#svGradCheck)"
-                                                        strokeWidth="2.5"
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                    />
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M20 6L9 17L4 12" stroke="url(#svGradCheck)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                                                     <defs>
-                                                        <linearGradient
-                                                            id="svGradCheck"
-                                                            x1="4"
-                                                            y1="6"
-                                                            x2="20"
-                                                            y2="17"
-                                                            gradientUnits="userSpaceOnUse"
-                                                        >
+                                                        <linearGradient id="svGradCheck" x1="4" y1="6" x2="20" y2="17" gradientUnits="userSpaceOnUse">
                                                             <stop stopColor="#ff2d2d" />
-                                                            <stop
-                                                                offset="1"
-                                                                stopColor="#ffac70"
-                                                            />
+                                                            <stop offset="1" stopColor="#ffac70" />
                                                         </linearGradient>
                                                     </defs>
                                                 </svg>
                                             </span>
                                             <span className="sv-content-text">
                                                 {item.text}{" "}
-                                                {item.highlight && (
-                                                    <strong>{item.highlight}</strong>
-                                                )}
+                                                {item.highlight && <strong>{item.highlight}</strong>}
                                             </span>
                                         </div>
                                     ))}
@@ -259,20 +221,34 @@ export default function Services() {
                         {/* Image */}
                         <div className="sv-visual">
                             <div className="sv-visual-frame">
-                                <div
-                                    className={`sv-visual-img ${isTransitioning ? "sv-visual-img--out" : ""}`}
-                                >
-                                    <img
-                                        src={activeService.image}
-                                        alt={activeService.title}
-                                        draggable={false}
-                                    />
+                                <div className="sv-visual-img" ref={imageRef}>
+                                    <img src={active.image} alt={active.title} draggable={false} />
                                 </div>
                             </div>
                         </div>
                     </div>
 
-
+                    {/* Tab navigation */}
+                    <div className="sv-tabs">
+                        {servicesData.map((service, i) => (
+                            <button
+                                key={i}
+                                className={`sv-tab ${activeIndex === i ? "sv-tab--active" : ""} ${activeIndex > i ? "sv-tab--past" : ""}`}
+                                onClick={() => handleTabClick(i)}
+                            >
+                                <div className="sv-tab-inner">
+                                    <span className="sv-tab-num">{service.num}</span>
+                                    <span className="sv-tab-title">{service.title}</span>
+                                </div>
+                                <span className="sv-tab-bar">
+                                    <span
+                                        className={`sv-tab-bar-fill ${activeIndex === i ? "sv-tab-bar-fill--run" : ""}`}
+                                        style={{ "--sv-duration": `${AUTO_PLAY_DURATION}ms` } as React.CSSProperties}
+                                    />
+                                </span>
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>
