@@ -315,14 +315,14 @@ input {
   justify-content: space-between;
 }
 
-/* Logo — premium Syne font, gradient orange text */
+/* Logo — Space Grotesk font, gradient orange text */
 .navbar-logo {
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.55rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   flex-shrink: 0;
   background: var(--gradient-primary);
@@ -433,6 +433,17 @@ input {
   background: rgba(255, 255, 255, 0.8);
   border-radius: 2px;
   transition: var(--transition-base);
+}
+
+/* Mobile: hamburger is black by default, white when navbar is dark */
+@media (max-width: 768px) {
+  .mobile-menu-btn span {
+    background: #1a1a1a;
+  }
+
+  .navbar.scrolled .mobile-menu-btn span {
+    background: rgba(255, 255, 255, 0.9);
+  }
 }
 
 /* Mobile menu overlay — dark themed */
