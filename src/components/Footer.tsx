@@ -7,72 +7,61 @@ export default function Footer() {
 
     return (
         <footer className="footer" ref={footerRef}>
-            <div className="container">
-                <div className="footer-grid">
-                    {/* Brand */}
-                    <div className="footer-brand reveal-item">
-                        <a href="#" className="navbar-logo" style={{ color: "white" }}>
-                            <img src="/mindfrix_logo.svg" alt="MindFrix Logo" width={40} height={40} className="navbar-logo-image" />
+            {/* Orange gradient orbs */}
+            <div className="footer-orb footer-orb-1" />
+            <div className="footer-orb footer-orb-2" />
+            <div className="footer-orb footer-orb-3" />
+
+            <div className="container" style={{ position: "relative", zIndex: 2 }}>
+                <div className="footer-main">
+
+                    {/* Brand + description */}
+                    <div className="footer-brand-col reveal-item">
+                        <a href="#" className="footer-brand-logo">
+                            <img src="/mindfrix_logo.svg" alt="MindFrix Logo" width={36} height={36} />
                             MindFrix
                         </a>
-                        <p>
-                            We are a modern creative agency dedicated to transforming brands
-                            through exceptional design and digital experiences.
+                        <p className="footer-brand-desc">
+                            Custom systems, AI automation, and web development for modern businesses.
                         </p>
                     </div>
 
-                    {/* Services */}
+                    {/* Links */}
                     <div className="footer-col reveal-item">
-                        <div className="footer-col-title">Services</div>
-                        <a href="#services">Branding</a>
-                        <a href="#services">UI/UX Design</a>
-                        <a href="#services">Web Development</a>
-                        <a href="#services">Print Design</a>
-                        <a href="#services">Motion Graphics</a>
-                    </div>
-
-                    {/* Company */}
-                    <div className="footer-col reveal-item">
-                        <div className="footer-col-title">Company</div>
+                        <div className="footer-col-title">Navigation</div>
+                        <a href="#">Home</a>
                         <a href="#about">About Us</a>
-                        <a href="#works">Our Work</a>
-                        <a href="#testimonials">Testimonials</a>
-                        <a href="#pricing">Pricing</a>
-                        <a href="#">Careers</a>
+                        <a href="#works">Projects</a>
+                        <a href="#services">Service</a>
+                        <a href="#faq">Contact</a>
                     </div>
 
-                    {/* Resources */}
+                    {/* Contact */}
                     <div className="footer-col reveal-item">
-                        <div className="footer-col-title">Resources</div>
-                        <a href="#">Blog</a>
-                        <a href="#">Case Studies</a>
-                        <a href="#">Help Center</a>
-                        <a href="#">Contact</a>
+                        <div className="footer-col-title">Contact</div>
+                        <a href="mailto:your@email.com">
+                            <span className="footer-contact-icon">✉</span> your@email.com
+                        </a>
+                        <span className="footer-contact-item">
+                            <span className="footer-contact-icon">📍</span> Remote / Worldwide
+                        </span>
                     </div>
 
-                    {/* Newsletter */}
-                    <div className="footer-newsletter reveal-item">
-                        <div className="footer-col-title">Newsletter</div>
-                        <p>
-                            Stay ahead with creative insights. Subscribe to our weekly newsletter.
-                        </p>
-                        <div className="footer-newsletter-form">
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                aria-label="Email address"
-                                id="newsletter-email"
-                            />
-                            <button className="btn-primary" id="newsletter-submit">
-                                Subscribe
-                            </button>
-                        </div>
+                    {/* Social Media */}
+                    <div className="footer-col reveal-item">
+                        <div className="footer-col-title">Social Media</div>
+                        <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a>
+                        <a href="#" target="_blank" rel="noopener noreferrer">Instagram</a>
+                        <a href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                        <a href="#" target="_blank" rel="noopener noreferrer">Pinterest</a>
+                        <a href="#" target="_blank" rel="noopener noreferrer">Twitter / X</a>
                     </div>
+
                 </div>
 
                 {/* Bottom */}
                 <div className="footer-bottom">
-                    <p>© 2024 MindFrix. All rights reserved.</p>
+                    <p>© 2025 MindFrix. All rights reserved.</p>
                     <div className="footer-bottom-links">
                         <a href="#">Privacy Policy</a>
                         <a href="#">Terms of Service</a>

@@ -18,6 +18,7 @@ export default function Navbar() {
         { label: "About", href: "#about" },
         { label: "Work", href: "#works" },
         { label: "Testimonial", href: "#testimonials" },
+        { label: "Contact", href: "/contact" },
     ];
 
     return (
@@ -39,7 +40,7 @@ export default function Navbar() {
                 </div>
 
                 {/* CTA Button */}
-                <a href="#pricing" className="btn-primary navbar-cta" id="buy-template-btn">
+                <a href="/contact" className="btn-primary navbar-cta" id="buy-template-btn">
                     Get a Free Consultation
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M5 12h14M12 5l7 7-7 7" />
@@ -80,7 +81,7 @@ export default function Navbar() {
                         </a>
                     ))}
                     <a
-                        href="#pricing"
+                        href="/contact"
                         className="btn-primary"
                         onClick={() => setMobileOpen(false)}
                     >
