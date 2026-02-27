@@ -61,7 +61,7 @@ export default function Footer() {
 
                 {/* Bottom */}
                 <div className="footer-bottom">
-                    <p>© 2025 MindFrix. All rights reserved.</p>
+                    <p>© 2026 MindFrix. All rights reserved.</p>
                     <div className="footer-bottom-links">
                         <a href="#">Privacy Policy</a>
                         <a href="#">Terms of Service</a>

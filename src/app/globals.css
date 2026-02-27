@@ -3095,38 +3095,25 @@ input {
 
 /* Icon box — rounded square like reference */
 .hiw-icon-box {
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   border-radius: var(--radius-xl);
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.75rem;
   position: relative;
   overflow: hidden;
-  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hiw-icon-box::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(255, 45, 45, 0.08), transparent, rgba(255, 172, 112, 0.1));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  opacity: 0.6;
-  transition: opacity 0.4s ease;
+  display: none;
 }
 
 .hiw-step:hover .hiw-icon-box {
-  border-color: rgba(255, 107, 53, 0.2);
   box-shadow: 0 0 30px rgba(255, 107, 53, 0.1), 0 0 60px rgba(255, 45, 45, 0.05);
   transform: translateY(-4px);
 }
@@ -3136,8 +3123,8 @@ input {
 }
 
 .hiw-icon-box img {
-  width: 68px;
-  height: 68px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: 12px;
 }
@@ -3412,13 +3399,13 @@ input {
   }
 
   .hiw-icon-box {
-    width: 80px;
-    height: 80px;
+    width: 105px;
+    height: 105px;
   }
 
   .hiw-icon-box img {
-    width: 56px;
-    height: 56px;
+    width: 80px;
+    height: 80px;
   }
 
   .footer-grid {
@@ -3535,9 +3522,9 @@ input {
   border-radius: var(--radius-full);
 }
 .contact-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: clamp(2rem, 5vw, 3.2rem);
-  font-weight: 800;
+  font-weight: 700;
   color: var(--color-white);
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -3671,9 +3658,9 @@ input {
   background-clip: text;
 }
 .cf-card-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: clamp(1.4rem, 3vw, 1.9rem);
-  font-weight: 800;
+  font-weight: 700;
   color: var(--color-white);
   letter-spacing: -0.02em;
 }

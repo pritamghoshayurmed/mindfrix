@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const pathname = usePathname();
+    const isHome = pathname === "/";
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -12,20 +15,21 @@ export default function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    // Prefix hash links with "/" when not on the home page
     const navLinks = [
-        { label: "Home", href: "#hero" },
-        { label: "Services", href: "#services" },
-        { label: "About", href: "#about" },
-        { label: "Work", href: "#works" },
-        { label: "Testimonial", href: "#testimonials" },
-        { label: "Contact", href: "/contact" },
+        { label: "Home",        href: isHome ? "#hero"         : "/#hero" },
+        { label: "Services",    href: isHome ? "#services"     : "/#services" },
+        { label: "About",       href: isHome ? "#about"        : "/#about" },
+        { label: "Work",        href: isHome ? "#works"        : "/#works" },
+        { label: "Testimonial", href: isHome ? "#testimonials" : "/#testimonials" },
+        { label: "Contact",     href: "/contact" },
     ];
 
     return (
         <nav className={`navbar ${scrolled ? "scrolled" : ""}`} id="navbar">
             <div className="container">
                 {/* Logo */}
-                <a href="#" className="navbar-logo">
+                <a href="/" className="navbar-logo">
                     <img src="/mindfrix_logo.svg" alt="MindFrix Logo" width={40} height={40} className="navbar-logo-image" />
                     MindFrix
                 </a>

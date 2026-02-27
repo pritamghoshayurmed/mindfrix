@@ -94,12 +94,12 @@ export default function Hero() {
                         <span className="star">★</span> 5.0
                     </div>
                     <div className="hero-avatars">
-                        <div className="avatar">JK</div>
-                        <div className="avatar">AL</div>
-                        <div className="avatar">MS</div>
-                        <div className="avatar">RW</div>
+                        <div className="avatar">PG</div>
+                        <div className="avatar">SK</div>
+                        <div className="avatar">VK</div>
+                        <div className="avatar">RS</div>
                     </div>
-                    <span className="hero-clients-text">1,000+ Satisfied Clients</span>
+                    <span className="hero-clients-text">200+ Satisfied Clients</span>
                 </div>
 
                 {/* Hero Title */}
