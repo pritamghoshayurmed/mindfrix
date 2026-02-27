@@ -7,25 +7,25 @@ const stepsData = [
     {
         num: "01",
         title: "Discovery",
-        desc: "We identify inefficiencies and opportunities in your business.",
+        desc: "We map your workflows, identify inefficiencies, and define the highest-impact opportunities in your business.",
         image: "/images/process/step-discovery.png",
     },
     {
         num: "02",
         title: "Build",
-        desc: "I design and develop your custom system or automation.",
+        desc: "We design and develop your custom system, automation, or application — built precisely to your requirements.",
         image: "/images/process/step-build.png",
     },
     {
         num: "03",
         title: "Launch",
-        desc: "Your system goes live with full testing and optimization.",
+        desc: "Your system goes live after rigorous testing, with your team fully trained and confident to use it.",
         image: "/images/process/step-launch.png",
     },
     {
         num: "04",
         title: "Scale",
-        desc: "Improve and expand as your business grows.",
+        desc: "We monitor performance, iterate based on data, and expand your systems as your business grows.",
         image: "/images/process/step-scale.png",
     },
 ];

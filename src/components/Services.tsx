@@ -10,46 +10,50 @@ const servicesData = [
     {
         num: "01",
         title: "Business Systems & Internal Tools",
-        desc: "Custom dashboards and internal tools to run your business efficiently — replacing scattered spreadsheets with a single source of truth.",
+        desc: "Custom dashboards and internal tools to run your business efficiently — replacing scattered spreadsheets with a single source of truth. Built specifically for how your team works.",
         impact: [
             { text: "Save", highlight: "10–30 hours per week" },
             { text: "Manage everything in", highlight: "one system" },
-            { text: "Improve team productivity", highlight: "" },
+            { text: "Eliminate errors & duplicated work", highlight: "" },
         ],
         image: "/images/service-business-systems.png",
+        imageAlt: "Custom business dashboard replacing spreadsheets — streamlined internal tools by MindFrix",
     },
     {
         num: "02",
         title: "Sales Funnels & Conversion Systems",
-        desc: "Landing pages and automated systems that turn visitors into customers with data-driven optimization at every step.",
+        desc: "High-converting landing pages and automated follow-up systems that turn cold visitors into paying customers — optimised at every step with data.",
         impact: [
             { text: "Increase conversions by", highlight: "20–60%" },
             { text: "Capture", highlight: "2–3× more leads" },
-            { text: "Automate follow-ups", highlight: "" },
+            { text: "Automate follow-ups & nurture sequences", highlight: "" },
         ],
         image: "/images/service-sales-funnels.png",
+        imageAlt: "Sales funnel and lead capture system with automated email follow-ups — built by MindFrix",
     },
     {
         num: "03",
         title: "AI Automation & Integration",
-        desc: "AI tools and automation that handle repetitive work for you — so your team can focus on what actually moves the needle.",
+        desc: "AI-powered workflows and integrations that handle repetitive tasks 24/7 — so your team can focus exclusively on high-value work that grows the business.",
         impact: [
-            { text: "Automate", highlight: "60–80% of tasks" },
-            { text: "Provide", highlight: "24/7 responses" },
-            { text: "Reduce operational costs", highlight: "" },
+            { text: "Automate", highlight: "60–80% of repetitive tasks" },
+            { text: "Deploy", highlight: "24/7 AI responses" },
+            { text: "Cut operational costs significantly", highlight: "" },
         ],
         image: "/images/service-ai-automation.png",
+        imageAlt: "AI automation workflow integration eliminating repetitive tasks — MindFrix AI services",
     },
     {
         num: "04",
         title: "Custom Web & App Development",
-        desc: "Scalable websites and web apps built for your exact needs — no templates, no compromises, just clean custom code.",
+        desc: "Scalable websites and web applications built precisely for your needs — no templates, no compromises, just clean production-ready code that performs.",
         impact: [
-            { text: "Launch faster", highlight: "" },
-            { text: "Replace expensive tools", highlight: "" },
-            { text: "Support long-term growth", highlight: "" },
+            { text: "Launch in", highlight: "4–8 weeks" },
+            { text: "Replace expensive off-the-shelf tools", highlight: "" },
+            { text: "Built to scale with your growth", highlight: "" },
         ],
         image: "/images/service-web-development.png",
+        imageAlt: "Custom web application and website development — no templates, built to scale by MindFrix",
     },
 ];
 
@@ -182,8 +186,8 @@ export default function Services() {
                             </h2>
                         </div>
                         <p className="sv-subtitle">
-                            Solutions designed to automate operations, increase
-                            conversions, and support long-term growth.
+                            Four high-impact services designed to automate your operations,
+                            increase conversions, and generate measurable revenue growth.
                         </p>
                     </div>
 
@@ -222,7 +226,7 @@ export default function Services() {
                         <div className="sv-visual">
                             <div className="sv-visual-frame">
                                 <div className="sv-visual-img" ref={imageRef}>
-                                    <img src={active.image} alt={active.title} draggable={false} />
+                                    <img src={active.image} alt={active.imageAlt} draggable={false} />
                                 </div>
                             </div>
                         </div>

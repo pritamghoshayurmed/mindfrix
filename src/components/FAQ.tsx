@@ -1,42 +1,56 @@
 "use client";
 
 import { useState } from "react";
+import Script from "next/script";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const faqData = [
     {
-        q: "What types of design services do you offer?",
-        a: "We offer a comprehensive range of design services including brand identity, UI/UX design, web development, print design, motion graphics, and creative strategy consulting.",
+        q: "What exactly does MindFrix build?",
+        a: "We build custom web applications, AI automation workflows, internal business tools, and sales funnel systems. Everything is built from scratch for your specific business — no templates, no off-the-shelf software.",
     },
     {
-        q: "How does the unlimited design subscription work?",
-        a: "With our subscription model, you can submit as many design requests as you like. We work through them one at a time, delivering high-quality designs with a 24-48 hour turnaround depending on your plan.",
+        q: "How much time can your automation save us?",
+        a: "Most clients save between 10 and 30 hours per week within the first 60 days. The exact savings depend on your current workflows, but we typically automate repetitive admin tasks, data entry, follow-ups, reporting, and customer communication.",
     },
     {
-        q: "What is your typical turnaround time?",
-        a: "Our turnaround time varies by plan. Starter plans receive designs in 48 hours, Professional in 24 hours, and Enterprise clients enjoy same-day delivery for urgent requests.",
+        q: "How quickly will we see results?",
+        a: "Most projects go live within 4–8 weeks. Sales funnel and automation projects often show measurable improvements — more leads, lower cost-per-acquisition, or time savings — within the first 30 days of going live.",
     },
     {
-        q: "Can I cancel my subscription anytime?",
-        a: "Absolutely! Our subscriptions are flexible with no long-term contracts. You can upgrade, downgrade, or cancel your plan at any time without any cancellation fees.",
+        q: "What is the investment for your services?",
+        a: "We tailor pricing to the complexity and scope of each project. Most clients invest between $3,000 and $25,000 depending on what's being built. Book a free consultation and we'll give you a clear, no-obligation quote after understanding your needs.",
     },
     {
-        q: "Do you provide source files?",
-        a: "Yes, all plans include complete source files in industry-standard formats like Figma, Adobe Creative Suite, and any other formats you need.",
+        q: "Do I need a technical background to work with you?",
+        a: "Not at all. We handle all the technical heavy lifting. You simply tell us what you want to achieve — more leads, less manual work, faster operations — and we translate that into a working system.",
     },
     {
-        q: "How do I communicate with my designer?",
-        a: "We use a dedicated project management platform where you can submit requests, provide feedback, and communicate directly with your assigned designer in real-time.",
+        q: "How is MindFrix different from hiring a freelancer or in-house team?",
+        a: "With MindFrix you get a full team — strategist, designer, developer, and automation engineer — for a fraction of the cost of hiring in-house. Unlike freelancers, we own the outcome: we stay accountable until the system is delivering results.",
     },
     {
-        q: "What if I'm not satisfied with the design?",
-        a: "We offer unlimited revisions until you're 100% satisfied. Our goal is to exceed your expectations, and we'll keep iterating until we get it right.",
+        q: "What industries do you work with?",
+        a: "We work with B2B service businesses, e-commerce brands, SaaS companies, marketing agencies, and professional services firms. If your business has repetitive workflows or needs more leads, we can help.",
     },
     {
-        q: "Do you work with startups and small businesses?",
-        a: "Yes! We work with businesses of all sizes, from early-stage startups to Fortune 500 companies. Our Starter plan is specifically designed for small businesses and growing brands.",
+        q: "Will you maintain and support the systems after launch?",
+        a: "Yes. We offer ongoing maintenance and support retainers. We'll also train your team on how to use and manage everything we build so you're never dependent on us for day-to-day operations.",
     },
 ];
+
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqData.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+            "@type": "Answer",
+            text: item.a,
+        },
+    })),
+};
 
 function FAQItem({ item, isOpen, toggle }: { item: typeof faqData[0]; isOpen: boolean; toggle: () => void }) {
     return (
@@ -65,46 +79,56 @@ export default function FAQ() {
     const col2 = faqData.slice(half);
 
     return (
-        <section className="faq section" ref={sectionRef}>
-            <div className="container">
-                <div style={{ textAlign: "center", marginBottom: "1rem" }}>
-                    <div className="section-label" style={{ justifyContent: "center" }}>
-                        <span className="dot"></span>
-                        FAQ
+        <>
+            <Script
+                id="schema-faq"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+            <section className="faq section" id="faq" ref={sectionRef}>
+                <div className="container">
+                    <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+                        <div className="section-label" style={{ justifyContent: "center" }}>
+                            <span className="dot"></span>
+                            FAQ
+                        </div>
+                        <h2 className="section-title">
+                            Frequently Asked <span className="gradient-text">Questions</span>
+                        </h2>
+                        <p style={{ color: "var(--text-muted, #aaa)", maxWidth: "540px", margin: "0.75rem auto 0" }}>
+                            Everything you need to know about working with MindFrix.
+                        </p>
                     </div>
-                    <h2 className="section-title">
-                        Frequently Asked <span className="gradient-text">Questions</span>
-                    </h2>
-                </div>
 
-                <div className="faq-grid">
-                    <div>
-                        {col1.map((item, i) => (
-                            <div className="reveal-item" key={i}>
-                                <FAQItem
-                                    item={item}
-                                    isOpen={openIndex === i}
-                                    toggle={() => toggle(i)}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                    <div>
-                        {col2.map((item, i) => {
-                            const realIndex = i + half;
-                            return (
-                                <div className="reveal-item" key={realIndex}>
+                    <div className="faq-grid">
+                        <div>
+                            {col1.map((item, i) => (
+                                <div className="reveal-item" key={i}>
                                     <FAQItem
                                         item={item}
-                                        isOpen={openIndex === realIndex}
-                                        toggle={() => toggle(realIndex)}
+                                        isOpen={openIndex === i}
+                                        toggle={() => toggle(i)}
                                     />
                                 </div>
-                            );
-                        })}
+                            ))}
+                        </div>
+                        <div>
+                            {col2.map((item, i) => {
+                                const realIndex = i + half;
+                                return (
+                                    <div className="reveal-item" key={realIndex}>
+                                        <FAQItem
+                                            item={item}
+                                            isOpen={openIndex === realIndex}
+                                            toggle={() => toggle(realIndex)}
+                                        />
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </>
     );
 }

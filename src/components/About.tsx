@@ -116,12 +116,13 @@ export default function About() {
                     {/* Body copy */}
                     <div className="about-text-block">
                         <p className="about-text">
-                            We help businesses streamline operations and grow using custom software,
-                            AI automation, and conversion-focused systems.
+                            We help businesses eliminate manual work and increase revenue with
+                            custom-built software, AI automation, and conversion systems.
+                            Every project is built from scratch — no shortcuts, no templates.
                         </p>
                         <p className="about-text">
-                            Our focus is building practical solutions that save time, reduce costs,
-                            and create measurable business impact.
+                            Our clients typically save 10–30 hours per week and see measurable
+                            revenue growth within the first 30 days of launch.
                         </p>
                     </div>
 
@@ -129,13 +130,13 @@ export default function About() {
                     <div className="about-callout">
                         <span className="about-callout-bar" aria-hidden="true" />
                         <p className="about-callout-text">
-                            Every system is designed specifically for your workflow and long-term scalability.
+                            We stay accountable until your system delivers results — not just until delivery.
                         </p>
                     </div>
 
                     {/* CTA */}
-                    <a href="#services" className="about-cta">
-                        <span>Explore Our Services</span>
+                    <a href="/contact" className="about-cta">
+                        <span>Book a Free Strategy Call</span>
                         <span className="about-cta-arrow">→</span>
                     </a>
                 </div>
