@@ -3960,3 +3960,95 @@ input {
     min-width: 0;
   }
 }
+
+/* ─── Thank You Page ─── */
+.thankyou-wrap {
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+  max-width: 580px;
+  text-align: center;
+  padding: clamp(3rem, 10vw, 6rem) var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  animation: cf-slide-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.thankyou-steps {
+  width: 100%;
+  background: var(--color-dark-card);
+  border: 1px solid rgba(255, 107, 53, 0.15);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  margin-top: var(--spacing-sm);
+  text-align: left;
+}
+
+.thankyou-steps-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ff6b35;
+  margin-bottom: var(--spacing-md);
+}
+
+.thankyou-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.thankyou-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.thankyou-step-num {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff2d2d, #ff6b35);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.thankyou-step-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 107, 53, 0.08);
+  border: 1px solid rgba(255, 107, 53, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff6b35;
+}
+
+.thankyou-step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.thankyou-step-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-white);
+}
+
+.thankyou-step-desc {
+  font-size: 0.875rem;
+  color: var(--color-grey);
+  line-height: 1.5;
+}

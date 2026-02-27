@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -32,6 +33,8 @@ interface FormData {
   salesSystem: string[];
   readyToInvest: string;
 }
+
+const STORAGE_KEY = "mindfix_contact_draft";
 
 const STEPS = [
   { number: 1, label: "Contact Info" },
@@ -90,11 +93,12 @@ function ArrowLeft() {
 }
 
 export default function ContactPage() {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormData>(initialData);
-  const [submitted, setSubmitted] = useState(false);
   const [direction, setDirection] = useState<"forward" | "back">("forward");
   const [animating, setAnimating] = useState(false);
+  const [restored, setRestored] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
 
   const totalSteps = 5;
@@ -133,50 +137,43 @@ export default function ContactPage() {
   }
 
   function handleSubmit() {
-    setSubmitted(true);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // ignore
+    }
+    router.push("/thank-you");
   }
+
+  // Restore form state from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const { form: savedForm, step: savedStep } = JSON.parse(saved);
+        if (savedForm) setForm(savedForm);
+        if (savedStep) setStep(savedStep);
+      }
+    } catch {
+      // ignore malformed data
+    }
+    setRestored(true);
+  }, []);
+
+  // Persist form state to localStorage on every change (after initial restore)
+  useEffect(() => {
+    if (!restored) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ form, step }));
+    } catch {
+      // ignore storage errors
+    }
+  }, [form, step, restored]);
 
   // Scroll to top of form on step change
   useEffect(() => {
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [step]);
-
-  if (submitted) {
-    return (
-      <>
-        <Navbar />
-        <main className="contact-page">
-          <div className="contact-orb contact-orb-1" />
-          <div className="contact-orb contact-orb-2" />
-          <div className="contact-orb contact-orb-3" />
-          <div className="contact-success-wrap">
-            <div className="contact-success-icon">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="url(#success-grad)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <defs>
-                  <linearGradient id="success-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#ff2d2d" />
-                    <stop offset="50%" stopColor="#ff6b35" />
-                    <stop offset="100%" stopColor="#ffac70" />
-                  </linearGradient>
-                </defs>
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            </div>
-            <h2 className="contact-success-title">
-              We&apos;ve got your details!
-            </h2>
-            <p className="contact-success-sub">
-              Our team will review your submission and reach out within <strong>24–48 hours</strong> to schedule your free strategy session.
-            </p>
-            <a href="/" className="btn-primary contact-success-btn">
-              Back to Home <ArrowRight />
-            </a>
-          </div>
-        </main>
-        <Footer />
-      </>
-    );
-  }
 
   const slideClass = animating
     ? direction === "forward"
