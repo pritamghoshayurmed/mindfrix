@@ -1,6 +1,6 @@
 "use server";
 
-import { sendLarkMail } from "@/lib/lark-mail";
+import { resend } from "@/lib/resend";
 
 const WEBHOOK_URL =
   "https://hook.eu1.make.com/nm93wshb9jwrx1b4r68a52j7n4legq6a";
@@ -138,13 +138,14 @@ export async function submitContactForm(
       };
     }
 
-    // Send confirmation email via Lark (fire-and-forget, don't block the user)
-    sendLarkMail({
+    // Send confirmation email via Resend (fire-and-forget, don't block the user)
+    resend.emails.send({
+      from: "MindFrix <contact@mindfrix.com>",
       to: data.email,
       subject: `We've received your application, ${data.founderName}! — MindFrix`,
       html: buildConfirmationEmail(data),
     }).catch((err) => {
-      console.error("Failed to send Lark confirmation email:", err);
+      console.error("Failed to send confirmation email:", err);
     });
 
     return { success: true };
