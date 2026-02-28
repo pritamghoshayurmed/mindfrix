@@ -4,32 +4,19 @@ const WEBHOOK_URL =
   "https://hook.eu1.make.com/nm93wshb9jwrx1b4r68a52j7n4legq6a";
 
 export interface ContactFormData {
-  // Step 1 – Contact Info
   businessName: string;
   founderName: string;
   phone: string;
   email: string;
   websiteLinks: string;
-  location: string;
-  // Step 2 – Business Overview
-  businessDetails: string;
-  businessType: string;
+  businessIndustry: string;
   yearsInBusiness: string;
-  usp: string;
-  // Step 3 – Revenue & Financials
   lastMonthRevenue: string;
-  annualRevenue: string;
   monthlyMarketingSpend: string;
-  // Step 4 – Customers & Team
-  teamSize: string;
   monthlyCustomers: string;
-  mainCustomerSource: string[];
-  // Step 5 – Marketing & Sales
-  biggestChallenge: string;
-  ranPaidAds: string;
-  monthlyMarketingBudget: string;
+  mainCustomerSource: string;
   salesSystem: string[];
-  readyToInvest: string;
+  meetingDate: string;
 }
 
 export async function submitContactForm(

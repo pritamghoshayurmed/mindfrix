@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 
 const statsData = [
-    { value: 800, suffix: "+", label: "Projects Completed", icon: "◈" },
+    { value: 50, suffix: "+", label: "Projects Completed", icon: "◈" },
     { value: 46, suffix: "%", label: "Revenue Growth", icon: "◉" },
-    { value: 250, suffix: "+", label: "Happy Clients", icon: "◈" },
+    { value: 25, suffix: "+", label: "Happy Clients", icon: "◈" },
     { value: 15, suffix: "+", label: "Team Members", icon: "◉" },
 ];
 

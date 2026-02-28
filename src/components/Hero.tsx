@@ -89,18 +89,7 @@ export default function Hero() {
 
             <div className="container hero-container">
                 {/* Social Proof */}
-                <div className="hero-social-proof" ref={socialRef} aria-label="Client ratings">
-                    <div className="hero-rating" aria-label="5 star rating">
-                        <span className="star" aria-hidden="true">★★★★★</span> 5.0
-                    </div>
-                    <div className="hero-avatars" aria-hidden="true">
-                        <div className="avatar">PG</div>
-                        <div className="avatar">SK</div>
-                        <div className="avatar">VK</div>
-                        <div className="avatar">RS</div>
-                    </div>
-                    <span className="hero-clients-text">Trusted by 200+ businesses worldwide</span>
-                </div>
+                
 
                 {/* Hero Title */}
                 <h1 className="hero-title" ref={titleRef}>

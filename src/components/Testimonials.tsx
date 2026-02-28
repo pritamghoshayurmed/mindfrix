@@ -4,45 +4,57 @@ import { useEffect, useRef, useCallback } from "react";
 
 const allTestimonials = [
     {
-        quote: "MindFrix completely transformed our brand presence. Their attention to detail and creative vision exceeded all expectations. The team delivered a brand identity that truly resonates with our audience.",
-        name: "Sarah Johnson",
-        role: "CEO, TechVault",
-        initials: "SJ",
+        quote: "MindFrix gave Tradee Point a sharp, market-ready identity that speaks directly to our traders and partners. Our brand now commands the trust and recognition we always aimed for.",
+        name: "Tradee Point",
+        initials: "TP",
         stars: 5,
     },
     {
-        quote: "Working with MindFrix was an incredible experience. They understood our vision from day one and translated it into a stunning digital experience that our users absolutely love.",
-        name: "Michael Chen",
-        role: "Founder, FinScope",
-        initials: "MC",
+        quote: "The team at MindFrix truly understood the education space. Our new branding for Sridhar Education feels authoritative, warm, and modern — exactly what students and parents expect today.",
+        name: "Sridhar Education",
+        initials: "SE",
         stars: 5,
     },
     {
-        quote: "The level of professionalism and creativity at MindFrix is unmatched. They delivered our entire rebrand in record time without compromising on quality. Highly recommended!",
-        name: "Emily Roberts",
-        role: "CMO, LuxeBrand",
-        initials: "ER",
+        quote: "MindFrix rebuilt our entire digital presence for Skill Acct with clarity and precision. Enrolments have gone up noticeably and our brand finally feels credible at scale.",
+        name: "Skill Acct",
+        initials: "SA",
         stars: 5,
     },
     {
-        quote: "From concept to execution, MindFrix demonstrated exceptional skill and dedication. Our website conversion rate increased by 340% after their redesign. Simply phenomenal.",
-        name: "David Park",
-        role: "Director, NovaMedia",
-        initials: "DP",
+        quote: "Tarakeswar Public School now has a brand identity that parents, staff, and students are genuinely proud of. MindFrix delivered a cohesive look that reflects our values impeccably.",
+        name: "Tarakeswar Public School",
+        initials: "TPS",
         stars: 5,
     },
     {
-        quote: "MindFrix brought our SaaS product to life with an interface so intuitive, users barely need onboarding. The conversion improvements have been remarkable — over 200% growth in sign-ups.",
-        name: "Priya Sharma",
-        role: "CPO, Stackly",
-        initials: "PS",
+        quote: "Bengali PSD Store needed a visual language that resonates with our creative community. MindFrix nailed it — our store now looks as premium as the products we offer.",
+        name: "Bengali PSD Store",
+        initials: "BPS",
         stars: 5,
     },
     {
-        quote: "Their strategic approach to branding gave us a cohesive identity across all touchpoints. We've seen a dramatic improvement in client trust and brand recall since the rebrand.",
-        name: "James Whitfield",
-        role: "Managing Director, Vertex Co.",
-        initials: "JW",
+        quote: "Working with MindFrix on Vedictreasure was a transformative experience. They captured the essence of our heritage brand and gave it a contemporary edge without losing its soul.",
+        name: "Vedictreasure",
+        initials: "VT",
+        stars: 5,
+    },
+    {
+        quote: "MindFrix helped wmcnctech establish a tech-forward brand presence that aligns with our engineering capabilities. Client confidence in our services has visibly improved since the rebrand.",
+        name: "wmcnctech",
+        initials: "WCT",
+        stars: 5,
+    },
+    {
+        quote: "The MindFrix team delivered a compelling digital identity for fmcmedia.in. Our media brand now stands out in a crowded market and our audience engagement metrics have surged.",
+        name: "fmcmedia.in",
+        initials: "FM",
+        stars: 5,
+    },
+    {
+        quote: "wmcnctechnology.com went from a generic online presence to a polished, professional brand thanks to MindFrix. The results have been outstanding — leads, trust, and visibility all improved.",
+        name: "wmcnctechnology.com",
+        initials: "WNC",
         stars: 5,
     },
 ];
@@ -50,12 +62,11 @@ const allTestimonials = [
 interface TestimonialCardProps {
     quote: string;
     name: string;
-    role: string;
     initials: string;
     stars: number;
 }
 
-function TestimonialCard({ quote, name, role, initials, stars }: TestimonialCardProps) {
+function TestimonialCard({ quote, name, initials, stars }: TestimonialCardProps) {
     const cardRef = useRef<HTMLDivElement>(null);
 
     const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -79,7 +90,6 @@ function TestimonialCard({ quote, name, role, initials, stars }: TestimonialCard
                     </div>
                     <div className="tcard-info">
                         <div className="tcard-name">{name}</div>
-                        <div className="tcard-role">{role}</div>
                     </div>
                     <div className="tcard-stars">{"★".repeat(stars)}</div>
                 </div>
@@ -158,7 +168,7 @@ export default function Testimonials() {
 
     // Two rows with different ordering for visual variety
     const row1 = allTestimonials;
-    const row2 = [...allTestimonials.slice(3), ...allTestimonials.slice(0, 3)];
+    const row2 = [...allTestimonials.slice(5), ...allTestimonials.slice(0, 5)];
     // Duplicate for seamless infinite loop
     const marqueeRow1 = [...row1, ...row1];
     const marqueeRow2 = [...row2, ...row2];
