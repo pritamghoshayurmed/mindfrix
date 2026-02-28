@@ -125,6 +125,7 @@ function CalendarPicker({ value, onChange, hasError }: { value: string; onChange
   const firstDay = new Date(viewYear, viewMonth, 1).getDay();
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
   const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+  const minDateStr = "2026-03-05";
 
   function prevMonth() {
     if (viewMonth === 0) { setViewMonth(11); setViewYear(viewYear - 1); }
@@ -137,8 +138,8 @@ function CalendarPicker({ value, onChange, hasError }: { value: string; onChange
 
   function selectDay(day: number) {
     const dateStr = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-    // Don't allow past dates
-    if (dateStr < todayStr) return;
+    // Don't allow dates before the minimum date
+    if (dateStr < minDateStr) return;
     onChange(dateStr);
     setOpen(false);
   }
@@ -176,16 +177,16 @@ function CalendarPicker({ value, onChange, hasError }: { value: string; onChange
             {blanks.map((b) => <span key={`b-${b}`} className="cf-cal-blank" />)}
             {days.map((day) => {
               const dateStr = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-              const isPast = dateStr < todayStr;
+              const isDisabled = dateStr < minDateStr;
               const isSelected = dateStr === value;
               const isToday = dateStr === todayStr;
               return (
                 <button
                   type="button"
                   key={day}
-                  className={`cf-cal-day${isSelected ? " selected" : ""}${isToday ? " today" : ""}${isPast ? " past" : ""}`}
+                  className={`cf-cal-day${isSelected ? " selected" : ""}${isToday ? " today" : ""}${isDisabled ? " past" : ""}`}
                   onClick={() => selectDay(day)}
-                  disabled={isPast}
+                  disabled={isDisabled}
                 >
                   {day}
                 </button>
