@@ -102,6 +102,8 @@ export default function ContactPage() {
   const [restored, setRestored] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, boolean>>>({});
+  const [stepError, setStepError] = useState<string | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
   const totalSteps = 5;
@@ -109,6 +111,8 @@ export default function ContactPage() {
 
   function update(field: keyof FormData, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => { const next = { ...prev }; delete next[field]; return next; });
+    setStepError(null);
   }
 
   function toggleMulti(field: "mainCustomerSource" | "salesSystem", value: string) {
@@ -119,6 +123,45 @@ export default function ContactPage() {
         [field]: arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value],
       };
     });
+    setErrors((prev) => { const next = { ...prev }; delete next[field]; return next; });
+    setStepError(null);
+  }
+
+  function validate(): boolean {
+    const e: Partial<Record<keyof FormData, boolean>> = {};
+    if (step === 1) {
+      if (!form.businessName.trim()) e.businessName = true;
+      if (!form.founderName.trim()) e.founderName = true;
+      if (!form.phone.trim()) e.phone = true;
+      if (!form.email.trim()) e.email = true;
+      if (!form.location.trim()) e.location = true;
+    } else if (step === 2) {
+      if (!form.businessDetails.trim()) e.businessDetails = true;
+      if (!form.businessType.trim()) e.businessType = true;
+      if (!form.yearsInBusiness) e.yearsInBusiness = true;
+      if (!form.usp.trim()) e.usp = true;
+    } else if (step === 3) {
+      if (!form.lastMonthRevenue.trim()) e.lastMonthRevenue = true;
+      if (!form.annualRevenue.trim()) e.annualRevenue = true;
+      if (!form.monthlyMarketingSpend.trim()) e.monthlyMarketingSpend = true;
+    } else if (step === 4) {
+      if (!form.teamSize.trim()) e.teamSize = true;
+      if (!form.monthlyCustomers.trim()) e.monthlyCustomers = true;
+      if (form.mainCustomerSource.length === 0) e.mainCustomerSource = true;
+    } else if (step === 5) {
+      if (!form.biggestChallenge) e.biggestChallenge = true;
+      if (!form.ranPaidAds) e.ranPaidAds = true;
+      if (!form.monthlyMarketingBudget) e.monthlyMarketingBudget = true;
+      if (form.salesSystem.length === 0) e.salesSystem = true;
+      if (!form.readyToInvest) e.readyToInvest = true;
+    }
+    setErrors(e);
+    if (Object.keys(e).length > 0) {
+      setStepError("Please fill in all required fields before continuing.");
+      return false;
+    }
+    setStepError(null);
+    return true;
   }
 
   function goTo(next: number, dir: "forward" | "back") {
@@ -132,14 +175,18 @@ export default function ContactPage() {
   }
 
   function handleNext() {
+    if (!validate()) return;
     if (step < totalSteps) goTo(step + 1, "forward");
   }
 
   function handleBack() {
+    setErrors({});
+    setStepError(null);
     if (step > 1) goTo(step - 1, "back");
   }
 
   async function handleSubmit() {
+    if (!validate()) return;
     setSubmitError(null);
     setSubmitting(true);
     try {
@@ -253,21 +300,21 @@ export default function ContactPage() {
                     <div className="cf-field">
                       <label className="cf-label">Business Name <span className="cf-required">*</span></label>
                       <input
-                        className="cf-input"
                         type="text"
                         placeholder="e.g. MindFrix Studio"
                         value={form.businessName}
                         onChange={(e) => update("businessName", e.target.value)}
+                        className={`cf-input${errors.businessName ? " cf-input-error" : ""}`}
                       />
                     </div>
                     <div className="cf-field">
                       <label className="cf-label">Founder / Decision Maker Name <span className="cf-required">*</span></label>
                       <input
-                        className="cf-input"
                         type="text"
                         placeholder="e.g. Rahul Sharma"
                         value={form.founderName}
                         onChange={(e) => update("founderName", e.target.value)}
+                        className={`cf-input${errors.founderName ? " cf-input-error" : ""}`}
                       />
                     </div>
                   </div>
@@ -276,21 +323,21 @@ export default function ContactPage() {
                     <div className="cf-field">
                       <label className="cf-label">Phone Number <span className="cf-required">*</span></label>
                       <input
-                        className="cf-input"
                         type="tel"
                         placeholder="WhatsApp preferred, e.g. +91 98765 43210"
                         value={form.phone}
                         onChange={(e) => update("phone", e.target.value)}
+                        className={`cf-input${errors.phone ? " cf-input-error" : ""}`}
                       />
                     </div>
                     <div className="cf-field">
                       <label className="cf-label">Email Address <span className="cf-required">*</span></label>
                       <input
-                        className="cf-input"
                         type="email"
                         placeholder="e.g. hello@yourbrand.com"
                         value={form.email}
                         onChange={(e) => update("email", e.target.value)}
+                        className={`cf-input${errors.email ? " cf-input-error" : ""}`}
                       />
                     </div>
                   </div>
@@ -298,22 +345,22 @@ export default function ContactPage() {
                   <div className="cf-field">
                     <label className="cf-label">Business Website / Social Media Links</label>
                     <input
-                      className="cf-input"
                       type="text"
                       placeholder="e.g. https://yourbrand.com  or  @yourbrand"
                       value={form.websiteLinks}
                       onChange={(e) => update("websiteLinks", e.target.value)}
+                      className="cf-input"
                     />
                   </div>
 
                   <div className="cf-field">
                     <label className="cf-label">Business Location <span className="cf-required">*</span></label>
                     <input
-                      className="cf-input"
                       type="text"
                       placeholder="e.g. Mumbai, India"
                       value={form.location}
                       onChange={(e) => update("location", e.target.value)}
+                      className={`cf-input${errors.location ? " cf-input-error" : ""}`}
                     />
                   </div>
                 </>
@@ -325,22 +372,22 @@ export default function ContactPage() {
                   <div className="cf-field">
                     <label className="cf-label">Tell us about your Business in Detail <span className="cf-required">*</span></label>
                     <textarea
-                      className="cf-input cf-textarea"
                       placeholder="Describe what your business does, who it serves, and what you're trying to achieve..."
                       value={form.businessDetails}
                       onChange={(e) => update("businessDetails", e.target.value)}
                       rows={4}
+                      className={`cf-input cf-textarea${errors.businessDetails ? " cf-input-error" : ""}`}
                     />
                   </div>
 
                   <div className="cf-field">
                     <label className="cf-label">Business Type <span className="cf-required">*</span></label>
                     <input
-                      className="cf-input"
                       type="text"
                       placeholder="e.g. E-commerce, SaaS, Service, Coaching, Agency..."
                       value={form.businessType}
                       onChange={(e) => update("businessType", e.target.value)}
+                      className={`cf-input${errors.businessType ? " cf-input-error" : ""}`}
                     />
                   </div>
 
@@ -351,7 +398,7 @@ export default function ContactPage() {
                         <button
                           type="button"
                           key={opt}
-                          className={`cf-option-btn ${form.yearsInBusiness === opt ? "selected" : ""}`}
+                          className={`cf-option-btn ${form.yearsInBusiness === opt ? "selected" : ""} ${errors.yearsInBusiness && form.yearsInBusiness !== opt ? "cf-option-error" : ""}`}
                           onClick={() => update("yearsInBusiness", opt)}
                         >
                           {form.yearsInBusiness === opt && <CheckIcon />} {opt}
@@ -363,11 +410,11 @@ export default function ContactPage() {
                   <div className="cf-field">
                     <label className="cf-label">Your Business USP <span className="cf-required">*</span></label>
                     <textarea
-                      className="cf-input cf-textarea"
                       placeholder="What makes you different from competitors?"
                       value={form.usp}
                       onChange={(e) => update("usp", e.target.value)}
                       rows={3}
+                      className={`cf-input cf-textarea${errors.usp ? " cf-input-error" : ""}`}
                     />
                   </div>
                 </>
@@ -379,33 +426,33 @@ export default function ContactPage() {
                   <div className="cf-field">
                     <label className="cf-label">Last Month Revenue <span className="cf-required">*</span></label>
                     <input
-                      className="cf-input"
                       type="text"
                       placeholder="e.g. ₹2,50,000"
                       value={form.lastMonthRevenue}
                       onChange={(e) => update("lastMonthRevenue", e.target.value)}
+                      className={`cf-input${errors.lastMonthRevenue ? " cf-input-error" : ""}`}
                     />
                   </div>
 
                   <div className="cf-field">
                     <label className="cf-label">Annual Revenue <span className="cf-required">*</span></label>
                     <input
-                      className="cf-input"
                       type="text"
                       placeholder="e.g. ₹24,00,000"
                       value={form.annualRevenue}
                       onChange={(e) => update("annualRevenue", e.target.value)}
+                      className={`cf-input${errors.annualRevenue ? " cf-input-error" : ""}`}
                     />
                   </div>
 
                   <div className="cf-field">
                     <label className="cf-label">Monthly Marketing Spend <span className="cf-required">*</span></label>
                     <input
-                      className="cf-input"
                       type="text"
                       placeholder="e.g. ₹30,000 / month"
                       value={form.monthlyMarketingSpend}
                       onChange={(e) => update("monthlyMarketingSpend", e.target.value)}
+                      className={`cf-input${errors.monthlyMarketingSpend ? " cf-input-error" : ""}`}
                     />
                   </div>
 
@@ -425,21 +472,23 @@ export default function ContactPage() {
                     <div className="cf-field">
                       <label className="cf-label">Current Team Size <span className="cf-required">*</span></label>
                       <input
-                        className="cf-input"
+
                         type="text"
                         placeholder="e.g. 5 people"
                         value={form.teamSize}
                         onChange={(e) => update("teamSize", e.target.value)}
+                        className={`cf-input${errors.teamSize ? " cf-input-error" : ""}`}
                       />
                     </div>
                     <div className="cf-field">
                       <label className="cf-label">Monthly Customer / Client Count <span className="cf-required">*</span></label>
                       <input
-                        className="cf-input"
+
                         type="text"
                         placeholder="e.g. 50 clients / month"
                         value={form.monthlyCustomers}
                         onChange={(e) => update("monthlyCustomers", e.target.value)}
+                        className={`cf-input${errors.monthlyCustomers ? " cf-input-error" : ""}`}
                       />
                     </div>
                   </div>
@@ -457,7 +506,7 @@ export default function ContactPage() {
                         <button
                           type="button"
                           key={opt}
-                          className={`cf-option-btn ${form.mainCustomerSource.includes(opt) ? "selected" : ""}`}
+                          className={`cf-option-btn ${form.mainCustomerSource.includes(opt) ? "selected" : ""} ${errors.mainCustomerSource && form.mainCustomerSource.length === 0 ? "cf-option-error" : ""}`}
                           onClick={() => toggleMulti("mainCustomerSource", opt)}
                         >
                           {form.mainCustomerSource.includes(opt) && <CheckIcon />} {opt}
@@ -478,7 +527,7 @@ export default function ContactPage() {
                         <button
                           type="button"
                           key={opt}
-                          className={`cf-option-btn ${form.biggestChallenge === opt ? "selected" : ""}`}
+                          className={`cf-option-btn ${form.biggestChallenge === opt ? "selected" : ""} ${errors.biggestChallenge && form.biggestChallenge !== opt ? "cf-option-error" : ""}`}
                           onClick={() => update("biggestChallenge", opt)}
                         >
                           {form.biggestChallenge === opt && <CheckIcon />} {opt}
@@ -494,7 +543,7 @@ export default function ContactPage() {
                         <button
                           type="button"
                           key={opt}
-                          className={`cf-option-btn ${form.ranPaidAds === opt ? "selected" : ""}`}
+                          className={`cf-option-btn ${form.ranPaidAds === opt ? "selected" : ""} ${errors.ranPaidAds && form.ranPaidAds !== opt ? "cf-option-error" : ""}`}
                           onClick={() => update("ranPaidAds", opt)}
                         >
                           {form.ranPaidAds === opt && <CheckIcon />} {opt}
@@ -510,7 +559,7 @@ export default function ContactPage() {
                         <button
                           type="button"
                           key={opt}
-                          className={`cf-option-btn ${form.monthlyMarketingBudget === opt ? "selected" : ""}`}
+                          className={`cf-option-btn ${form.monthlyMarketingBudget === opt ? "selected" : ""} ${errors.monthlyMarketingBudget && form.monthlyMarketingBudget !== opt ? "cf-option-error" : ""}`}
                           onClick={() => update("monthlyMarketingBudget", opt)}
                         >
                           {form.monthlyMarketingBudget === opt && <CheckIcon />} {opt}
@@ -526,7 +575,7 @@ export default function ContactPage() {
                         <button
                           type="button"
                           key={opt}
-                          className={`cf-option-btn ${form.salesSystem.includes(opt) ? "selected" : ""}`}
+                          className={`cf-option-btn ${form.salesSystem.includes(opt) ? "selected" : ""} ${errors.salesSystem && form.salesSystem.length === 0 ? "cf-option-error" : ""}`}
                           onClick={() => toggleMulti("salesSystem", opt)}
                         >
                           {form.salesSystem.includes(opt) && <CheckIcon />} {opt}
@@ -542,7 +591,7 @@ export default function ContactPage() {
                         <button
                           type="button"
                           key={opt}
-                          className={`cf-option-btn ${form.readyToInvest === opt ? "selected" : ""}`}
+                          className={`cf-option-btn ${form.readyToInvest === opt ? "selected" : ""} ${errors.readyToInvest && form.readyToInvest !== opt ? "cf-option-error" : ""}`}
                           onClick={() => update("readyToInvest", opt)}
                         >
                           {form.readyToInvest === opt && <CheckIcon />} {opt}
@@ -553,6 +602,11 @@ export default function ContactPage() {
                 </>
               )}
             </div>
+
+            {/* Validation error */}
+            {stepError && (
+              <p className="cf-step-error">{stepError}</p>
+            )}
 
             {/* Navigation */}
             <div className="cf-nav">
@@ -586,14 +640,6 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Trust strip */}
-          <div className="cf-trust-strip">
-            <span>🔒 100% Confidential</span>
-            <span className="cf-trust-dot" />
-            <span>No spam, ever</span>
-            <span className="cf-trust-dot" />
-            <span>Free strategy call included</span>
-          </div>
         </div>
       </main>
       <Footer />

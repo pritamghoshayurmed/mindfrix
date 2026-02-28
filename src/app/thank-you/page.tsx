@@ -128,14 +128,7 @@ export default function ThankYouPage() {
             Back to Home <ArrowRight />
           </Link>
 
-          {/* Trust strip */}
-          <div className="cf-trust-strip" style={{ marginTop: "1.5rem" }}>
-            <span>🔒 100% Confidential</span>
-            <span className="cf-trust-dot" />
-            <span>No spam, ever</span>
-            <span className="cf-trust-dot" />
-            <span>Free strategy call included</span>
-          </div>
+
         </div>
       </main>
       <Footer />

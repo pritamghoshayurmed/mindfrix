@@ -3824,6 +3824,27 @@ input {
   opacity: 0.6;
   cursor: not-allowed;
 }
+.cf-step-error {
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.08);
+  border: 1px solid rgba(255, 107, 107, 0.25);
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 0.25rem;
+  text-align: center;
+}
+.cf-input-error {
+  border-color: rgba(255, 107, 107, 0.7) !important;
+  background: rgba(255, 107, 107, 0.05) !important;
+}
+.cf-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15) !important;
+}
+.cf-option-error {
+  border-color: rgba(255, 107, 107, 0.5) !important;
+}
 .cf-submit-error {
   font-family: var(--font-primary);
   font-size: 0.85rem;
@@ -3881,7 +3902,7 @@ input {
   box-shadow: 0 0 0 8px rgba(255, 107, 53, 0.08), 0 10px 40px rgba(255, 45, 45, 0.25);
 }
 .contact-success-title {
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-primary);
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 800;
   color: var(--color-white);

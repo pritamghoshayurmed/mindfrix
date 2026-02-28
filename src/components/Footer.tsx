@@ -56,7 +56,7 @@ export default function Footer() {
                     <div className="footer-col reveal-item">
                         <div className="footer-col-title">Contact</div>
                         <a href="mailto:hello@mindfrix.com" aria-label="Send email to MindFrix">
-                            <span className="footer-contact-icon" aria-hidden="true">✉</span> hello@mindfrix.com
+                            <span className="footer-contact-icon" aria-hidden="true">✉</span> contact@mindfrix.com
                         </a>
                         <a href="/contact" className="btn-primary" style={{ marginTop: "0.75rem", fontSize: "0.8rem", padding: "0.6rem 1.2rem", display: "inline-flex", alignItems: "center", gap: "0.4rem" }}>
                             Book a Free Call
