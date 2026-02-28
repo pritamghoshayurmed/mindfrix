@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { submitContactForm } from "./actions";
 
 interface FormData {
   // Step 1 – Contact Info
@@ -99,6 +100,8 @@ export default function ContactPage() {
   const [direction, setDirection] = useState<"forward" | "back">("forward");
   const [animating, setAnimating] = useState(false);
   const [restored, setRestored] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
   const totalSteps = 5;
@@ -136,13 +139,26 @@ export default function ContactPage() {
     if (step > 1) goTo(step - 1, "back");
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
+    setSubmitError(null);
+    setSubmitting(true);
     try {
-      localStorage.removeItem(STORAGE_KEY);
+      const result = await submitContactForm(form);
+      if (!result.success) {
+        setSubmitError(result.error ?? "Something went wrong. Please try again.");
+        setSubmitting(false);
+        return;
+      }
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        // ignore
+      }
+      router.push("/thank-you");
     } catch {
-      // ignore
+      setSubmitError("Unexpected error. Please try again.");
+      setSubmitting(false);
     }
-    router.push("/thank-you");
   }
 
   // Restore form state from localStorage on mount
@@ -553,9 +569,19 @@ export default function ContactPage() {
                   Continue <ArrowRight />
                 </button>
               ) : (
-                <button type="button" className="btn-primary cf-btn-submit" onClick={handleSubmit}>
-                  Submit Application <ArrowRight />
-                </button>
+                <>
+                  {submitError && (
+                    <p className="cf-submit-error">{submitError}</p>
+                  )}
+                  <button
+                    type="button"
+                    className="btn-primary cf-btn-submit"
+                    onClick={handleSubmit}
+                    disabled={submitting}
+                  >
+                    {submitting ? "Submitting…" : <>Submit Application <ArrowRight /></>}
+                  </button>
+                </>
               )}
             </div>
           </div>

@@ -3820,6 +3820,21 @@ input {
   min-width: 180px;
   justify-content: center;
 }
+.cf-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.cf-submit-error {
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.25);
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
 
 /* ─── Trust strip ─── */
 .cf-trust-strip {
