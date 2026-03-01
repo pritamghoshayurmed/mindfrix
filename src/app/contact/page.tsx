@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { submitContactForm } from "./actions";
+import MetaPixel from "@/components/MetaPixel";
 
 /* ─── Types ─── */
 interface FormData {
@@ -45,7 +46,16 @@ const initialData: FormData = {
 /* ─── Icons ─── */
 function CheckIcon({ size = 14 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <polyline points="20 6 9 17 4 12" />
     </svg>
   );
@@ -53,7 +63,16 @@ function CheckIcon({ size = 14 }: { size?: number }) {
 
 function ArrowLeft() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M19 12H5M12 19l-7-7 7-7" />
     </svg>
   );
@@ -61,7 +80,16 @@ function ArrowLeft() {
 
 function ArrowRight() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M5 12h14M12 5l7 7-7 7" />
     </svg>
   );
@@ -69,7 +97,16 @@ function ArrowRight() {
 
 function SpinnerIcon() {
   return (
-    <svg className="cf-spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+    <svg
+      className="cf-spinner"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    >
       <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
     </svg>
   );
@@ -77,7 +114,16 @@ function SpinnerIcon() {
 
 function CalendarIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
       <line x1="16" y1="2" x2="16" y2="6" />
       <line x1="8" y1="2" x2="8" y2="6" />
@@ -88,7 +134,16 @@ function CalendarIcon() {
 
 function ChevronLeft() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <polyline points="15 18 9 12 15 6" />
     </svg>
   );
@@ -96,17 +151,47 @@ function ChevronLeft() {
 
 function ChevronRight() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <polyline points="9 18 15 12 9 6" />
     </svg>
   );
 }
 
 /* ─── Calendar Picker Component ─── */
-const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const MONTH_NAMES = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 const DAY_LABELS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-function CalendarPicker({ value, onChange, hasError }: { value: string; onChange: (v: string) => void; hasError: boolean }) {
+function CalendarPicker({
+  value,
+  onChange,
+  hasError,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  hasError: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const today = new Date();
   const [viewYear, setViewYear] = useState(today.getFullYear());
@@ -116,7 +201,8 @@ function CalendarPicker({ value, onChange, hasError }: { value: string; onChange
   // Close on outside click
   useEffect(() => {
     function handler(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
     }
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -128,12 +214,16 @@ function CalendarPicker({ value, onChange, hasError }: { value: string; onChange
   const minDateStr = "2026-03-05";
 
   function prevMonth() {
-    if (viewMonth === 0) { setViewMonth(11); setViewYear(viewYear - 1); }
-    else setViewMonth(viewMonth - 1);
+    if (viewMonth === 0) {
+      setViewMonth(11);
+      setViewYear(viewYear - 1);
+    } else setViewMonth(viewMonth - 1);
   }
   function nextMonth() {
-    if (viewMonth === 11) { setViewMonth(0); setViewYear(viewYear + 1); }
-    else setViewMonth(viewMonth + 1);
+    if (viewMonth === 11) {
+      setViewMonth(0);
+      setViewYear(viewYear + 1);
+    } else setViewMonth(viewMonth + 1);
   }
 
   function selectDay(day: number) {
@@ -166,15 +256,35 @@ function CalendarPicker({ value, onChange, hasError }: { value: string; onChange
       {open && (
         <div className="cf-calendar-dropdown">
           <div className="cf-cal-header">
-            <button type="button" className="cf-cal-nav-btn" onClick={prevMonth}><ChevronLeft /></button>
-            <span className="cf-cal-month-label">{MONTH_NAMES[viewMonth]} {viewYear}</span>
-            <button type="button" className="cf-cal-nav-btn" onClick={nextMonth}><ChevronRight /></button>
+            <button
+              type="button"
+              className="cf-cal-nav-btn"
+              onClick={prevMonth}
+            >
+              <ChevronLeft />
+            </button>
+            <span className="cf-cal-month-label">
+              {MONTH_NAMES[viewMonth]} {viewYear}
+            </span>
+            <button
+              type="button"
+              className="cf-cal-nav-btn"
+              onClick={nextMonth}
+            >
+              <ChevronRight />
+            </button>
           </div>
           <div className="cf-cal-days-header">
-            {DAY_LABELS.map((d) => <span key={d} className="cf-cal-day-label">{d}</span>)}
+            {DAY_LABELS.map((d) => (
+              <span key={d} className="cf-cal-day-label">
+                {d}
+              </span>
+            ))}
           </div>
           <div className="cf-cal-grid">
-            {blanks.map((b) => <span key={`b-${b}`} className="cf-cal-blank" />)}
+            {blanks.map((b) => (
+              <span key={`b-${b}`} className="cf-cal-blank" />
+            ))}
             {days.map((day) => {
               const dateStr = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
               const isDisabled = dateStr < minDateStr;
@@ -206,17 +316,25 @@ export default function ContactPage() {
   const [restored, setRestored] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
+    {},
+  );
   const [formError, setFormError] = useState<string | null>(null);
 
   // Save indicator state
-  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">(
+    "idle",
+  );
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function update(field: keyof FormData, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev) => { const next = { ...prev }; delete next[field]; return next; });
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
     setFormError(null);
   }
 
@@ -225,17 +343,24 @@ export default function ContactPage() {
       const arr = prev[field] as string[];
       return {
         ...prev,
-        [field]: arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value],
+        [field]: arr.includes(value)
+          ? arr.filter((v) => v !== value)
+          : [...arr, value],
       };
     });
-    setErrors((prev) => { const next = { ...prev }; delete next[field]; return next; });
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
     setFormError(null);
   }
 
   function validate(): boolean {
     const e: Partial<Record<keyof FormData, string>> = {};
 
-    if (!form.businessName.trim()) e.businessName = "Business name is required.";
+    if (!form.businessName.trim())
+      e.businessName = "Business name is required.";
     if (!form.founderName.trim()) e.founderName = "Founder name is required.";
 
     // Phone: strip spaces/dashes, must be digits (with optional leading +)
@@ -253,7 +378,8 @@ export default function ContactPage() {
       e.email = "Enter a valid email address.";
     }
 
-    if (!form.businessIndustry.trim()) e.businessIndustry = "Business industry is required.";
+    if (!form.businessIndustry.trim())
+      e.businessIndustry = "Business industry is required.";
     if (!form.yearsInBusiness) e.yearsInBusiness = "Please select an option.";
 
     // Numeric fields
@@ -275,8 +401,10 @@ export default function ContactPage() {
       e.monthlyCustomers = "Enter a valid number (e.g. 50).";
     }
 
-    if (!form.mainCustomerSource) e.mainCustomerSource = "Please select your main source.";
-    if (form.salesSystem.length === 0) e.salesSystem = "Please select at least one option.";
+    if (!form.mainCustomerSource)
+      e.mainCustomerSource = "Please select your main source.";
+    if (form.salesSystem.length === 0)
+      e.salesSystem = "Please select at least one option.";
     if (!form.meetingDate) e.meetingDate = "Please select a meeting date.";
 
     setErrors(e);
@@ -295,11 +423,17 @@ export default function ContactPage() {
     try {
       const result = await submitContactForm(form);
       if (!result.success) {
-        setSubmitError(result.error ?? "Something went wrong. Please try again.");
+        setSubmitError(
+          result.error ?? "Something went wrong. Please try again.",
+        );
         setSubmitting(false);
         return;
       }
-      try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        /* ignore */
+      }
       router.push("/thank-you");
     } catch {
       setSubmitError("Unexpected error. Please try again.");
@@ -319,15 +453,20 @@ export default function ContactPage() {
             ...initialData,
             ...parsed,
             // Ensure arrays stay arrays
-            salesSystem: Array.isArray(parsed.salesSystem) ? parsed.salesSystem : [],
+            salesSystem: Array.isArray(parsed.salesSystem)
+              ? parsed.salesSystem
+              : [],
             // mainCustomerSource was array in old schema, now string
-            mainCustomerSource: typeof parsed.mainCustomerSource === "string"
-              ? parsed.mainCustomerSource
-              : "",
+            mainCustomerSource:
+              typeof parsed.mainCustomerSource === "string"
+                ? parsed.mainCustomerSource
+                : "",
           });
         }
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     setRestored(true);
   }, []);
 
@@ -342,7 +481,9 @@ export default function ContactPage() {
     saveTimerRef.current = setTimeout(() => {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
       setSaveStatus("saved");
 
       hideTimerRef.current = setTimeout(() => {
@@ -358,6 +499,7 @@ export default function ContactPage() {
 
   return (
     <main className="cp-page">
+      <MetaPixel pixelId="1273490387964007" />
       {/* Background effects */}
       <div className="cp-bg-orb cp-bg-orb-1" />
       <div className="cp-bg-orb cp-bg-orb-2" />
@@ -365,16 +507,27 @@ export default function ContactPage() {
 
       {/* Top bar: Go Home + Logo + Save Indicator */}
       <div className="cp-topbar">
-        <button type="button" className="cp-home-btn" onClick={() => router.push("/")}>
+        <button
+          type="button"
+          className="cp-home-btn"
+          onClick={() => router.push("/")}
+        >
           <ArrowLeft />
         </button>
 
         <a href="/" className="cp-topbar-logo">
-          <img src="/mindfrix_logo.svg" alt="MindFrix Logo" width={42} height={42} />
+          <img
+            src="/mindfrix_logo.svg"
+            alt="MindFrix Logo"
+            width={42}
+            height={42}
+          />
           MindFrix
         </a>
 
-        <div className={`cp-save-indicator ${saveStatus !== "idle" ? "visible" : ""} ${saveStatus}`}>
+        <div
+          className={`cp-save-indicator ${saveStatus !== "idle" ? "visible" : ""} ${saveStatus}`}
+        >
           {saveStatus === "saving" && (
             <>
               <SpinnerIcon />
@@ -399,21 +552,23 @@ export default function ContactPage() {
             Tell us about your <span className="gradient-text">Business</span>
           </h1>
           <p className="cp-subtitle">
-            Fill out the form below and we&apos;ll craft a personalised growth strategy for you.
+            Fill out the form below and we&apos;ll craft a personalised growth
+            strategy for you.
           </p>
         </div>
 
         {/* Form card */}
         <div className="cp-card">
           <div className="cp-fields">
-
             {/* ─── Contact Info Section ─── */}
             <div className="cp-section">
               <h2 className="cp-section-title">Contact Information</h2>
               <div className="cp-section-fields">
                 <div className="cf-field-row">
                   <div className="cf-field">
-                    <label className="cf-label">Business Name <span className="cf-required">*</span></label>
+                    <label className="cf-label">
+                      Business Name <span className="cf-required">*</span>
+                    </label>
                     <input
                       type="text"
                       placeholder="e.g. MindFrix"
@@ -423,7 +578,10 @@ export default function ContactPage() {
                     />
                   </div>
                   <div className="cf-field">
-                    <label className="cf-label">Founder / Decision Maker Name <span className="cf-required">*</span></label>
+                    <label className="cf-label">
+                      Founder / Decision Maker Name{" "}
+                      <span className="cf-required">*</span>
+                    </label>
                     <input
                       type="text"
                       placeholder="e.g. Rahul Sharma"
@@ -435,7 +593,10 @@ export default function ContactPage() {
                 </div>
                 <div className="cf-field-row">
                   <div className="cf-field">
-                    <label className="cf-label">Phone Number (WhatsApp preferred) <span className="cf-required">*</span></label>
+                    <label className="cf-label">
+                      Phone Number (WhatsApp preferred){" "}
+                      <span className="cf-required">*</span>
+                    </label>
                     <input
                       type="tel"
                       placeholder="98765 43210"
@@ -443,10 +604,14 @@ export default function ContactPage() {
                       onChange={(e) => update("phone", e.target.value)}
                       className={`cf-input${errors.phone ? " cf-input-error" : ""}`}
                     />
-                    {errors.phone && <span className="cf-field-error">{errors.phone}</span>}
+                    {errors.phone && (
+                      <span className="cf-field-error">{errors.phone}</span>
+                    )}
                   </div>
                   <div className="cf-field">
-                    <label className="cf-label">Email Address <span className="cf-required">*</span></label>
+                    <label className="cf-label">
+                      Email Address <span className="cf-required">*</span>
+                    </label>
                     <input
                       type="email"
                       placeholder="e.g. hello@yourbrand.com"
@@ -454,11 +619,15 @@ export default function ContactPage() {
                       onChange={(e) => update("email", e.target.value)}
                       className={`cf-input${errors.email ? " cf-input-error" : ""}`}
                     />
-                    {errors.email && <span className="cf-field-error">{errors.email}</span>}
+                    {errors.email && (
+                      <span className="cf-field-error">{errors.email}</span>
+                    )}
                   </div>
                 </div>
                 <div className="cf-field">
-                  <label className="cf-label">Business Website / Social Media Links</label>
+                  <label className="cf-label">
+                    Business Website / Social Media Links
+                  </label>
                   <input
                     type="text"
                     placeholder="e.g. https://yourbrand.com or @yourbrand"
@@ -475,7 +644,9 @@ export default function ContactPage() {
               <h2 className="cp-section-title">Business Overview</h2>
               <div className="cp-section-fields">
                 <div className="cf-field">
-                  <label className="cf-label">Business Industry <span className="cf-required">*</span></label>
+                  <label className="cf-label">
+                    Business Industry <span className="cf-required">*</span>
+                  </label>
                   <input
                     type="text"
                     placeholder="e.g. E-commerce, SaaS, Real Estate, Coaching..."
@@ -485,9 +656,17 @@ export default function ContactPage() {
                   />
                 </div>
                 <div className="cf-field">
-                  <label className="cf-label">How long have you been in business? <span className="cf-required">*</span></label>
+                  <label className="cf-label">
+                    How long have you been in business?{" "}
+                    <span className="cf-required">*</span>
+                  </label>
                   <div className="cf-options-grid">
-                    {["Less than 6 months", "6–12 months", "1–3 years", "3+ years"].map((opt) => (
+                    {[
+                      "Less than 6 months",
+                      "6–12 months",
+                      "1–3 years",
+                      "3+ years",
+                    ].map((opt) => (
                       <button
                         type="button"
                         key={opt}
@@ -508,7 +687,10 @@ export default function ContactPage() {
               <div className="cp-section-fields">
                 <div className="cf-field-row">
                   <div className="cf-field">
-                    <label className="cf-label">Last Month Revenue (₹) <span className="cf-required">*</span></label>
+                    <label className="cf-label">
+                      Last Month Revenue (₹){" "}
+                      <span className="cf-required">*</span>
+                    </label>
                     <div className="cf-input-prefix-wrap">
                       <span className="cf-input-prefix">₹</span>
                       <input
@@ -516,14 +698,26 @@ export default function ContactPage() {
                         inputMode="numeric"
                         placeholder="e.g. 250000"
                         value={form.lastMonthRevenue}
-                        onChange={(e) => update("lastMonthRevenue", e.target.value.replace(/[^0-9,]/g, ""))}
+                        onChange={(e) =>
+                          update(
+                            "lastMonthRevenue",
+                            e.target.value.replace(/[^0-9,]/g, ""),
+                          )
+                        }
                         className={`cf-input cf-input-with-prefix${errors.lastMonthRevenue ? " cf-input-error" : ""}`}
                       />
                     </div>
-                    {errors.lastMonthRevenue && <span className="cf-field-error">{errors.lastMonthRevenue}</span>}
+                    {errors.lastMonthRevenue && (
+                      <span className="cf-field-error">
+                        {errors.lastMonthRevenue}
+                      </span>
+                    )}
                   </div>
                   <div className="cf-field">
-                    <label className="cf-label">Marketing Spend Every Month (₹) <span className="cf-required">*</span></label>
+                    <label className="cf-label">
+                      Marketing Spend Every Month (₹){" "}
+                      <span className="cf-required">*</span>
+                    </label>
                     <div className="cf-input-prefix-wrap">
                       <span className="cf-input-prefix">₹</span>
                       <input
@@ -531,24 +725,45 @@ export default function ContactPage() {
                         inputMode="numeric"
                         placeholder="e.g. 30000"
                         value={form.monthlyMarketingSpend}
-                        onChange={(e) => update("monthlyMarketingSpend", e.target.value.replace(/[^0-9,]/g, ""))}
+                        onChange={(e) =>
+                          update(
+                            "monthlyMarketingSpend",
+                            e.target.value.replace(/[^0-9,]/g, ""),
+                          )
+                        }
                         className={`cf-input cf-input-with-prefix${errors.monthlyMarketingSpend ? " cf-input-error" : ""}`}
                       />
                     </div>
-                    {errors.monthlyMarketingSpend && <span className="cf-field-error">{errors.monthlyMarketingSpend}</span>}
+                    {errors.monthlyMarketingSpend && (
+                      <span className="cf-field-error">
+                        {errors.monthlyMarketingSpend}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="cf-field">
-                  <label className="cf-label">Monthly Customer / Client Count <span className="cf-required">*</span></label>
+                  <label className="cf-label">
+                    Monthly Customer / Client Count{" "}
+                    <span className="cf-required">*</span>
+                  </label>
                   <input
                     type="text"
                     inputMode="numeric"
                     placeholder="e.g. 50"
                     value={form.monthlyCustomers}
-                    onChange={(e) => update("monthlyCustomers", e.target.value.replace(/[^0-9]/g, ""))}
+                    onChange={(e) =>
+                      update(
+                        "monthlyCustomers",
+                        e.target.value.replace(/[^0-9]/g, ""),
+                      )
+                    }
                     className={`cf-input${errors.monthlyCustomers ? " cf-input-error" : ""}`}
                   />
-                  {errors.monthlyCustomers && <span className="cf-field-error">{errors.monthlyCustomers}</span>}
+                  {errors.monthlyCustomers && (
+                    <span className="cf-field-error">
+                      {errors.monthlyCustomers}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -558,7 +773,10 @@ export default function ContactPage() {
               <h2 className="cp-section-title">Customers &amp; Sales</h2>
               <div className="cp-section-fields">
                 <div className="cf-field">
-                  <label className="cf-label">Main Source of Customers <span className="cf-required">*</span></label>
+                  <label className="cf-label">
+                    Main Source of Customers{" "}
+                    <span className="cf-required">*</span>
+                  </label>
                   <div className="cf-options-grid">
                     {[
                       "Organic (Instagram, YouTube, SEO)",
@@ -579,9 +797,19 @@ export default function ContactPage() {
                   </div>
                 </div>
                 <div className="cf-field">
-                  <label className="cf-label">Do you have a sales system in place? <span className="cf-required">*</span> <span className="cf-hint">(select all that apply)</span></label>
+                  <label className="cf-label">
+                    Do you have a sales system in place?{" "}
+                    <span className="cf-required">*</span>{" "}
+                    <span className="cf-hint">(select all that apply)</span>
+                  </label>
                   <div className="cf-options-grid">
-                    {["Website", "Funnel", "CRM", "WhatsApp Automation", "None"].map((opt) => (
+                    {[
+                      "Website",
+                      "Funnel",
+                      "CRM",
+                      "WhatsApp Automation",
+                      "None",
+                    ].map((opt) => (
                       <button
                         type="button"
                         key={opt}
@@ -601,7 +829,9 @@ export default function ContactPage() {
               <h2 className="cp-section-title">Book Your Meeting</h2>
               <div className="cp-section-fields">
                 <div className="cf-field">
-                  <label className="cf-label">Meeting Booking Date <span className="cf-required">*</span></label>
+                  <label className="cf-label">
+                    Meeting Booking Date <span className="cf-required">*</span>
+                  </label>
                   <CalendarPicker
                     value={form.meetingDate}
                     onChange={(v) => update("meetingDate", v)}
@@ -610,13 +840,22 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-
           </div>
 
           {/* Privacy note */}
           <div className="cp-privacy-note">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
             Your data is encrypted and kept strictly confidential.
           </div>
@@ -633,7 +872,13 @@ export default function ContactPage() {
               onClick={handleSubmit}
               disabled={submitting}
             >
-              {submitting ? "Submitting…" : <>Submit Application <ArrowRight /></>}
+              {submitting ? (
+                "Submitting…"
+              ) : (
+                <>
+                  Submit Application <ArrowRight />
+                </>
+              )}
             </button>
           </div>
         </div>
