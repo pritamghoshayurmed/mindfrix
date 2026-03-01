@@ -47,10 +47,11 @@ function buildConfirmationEmail(data: ContactFormData): string {
     .greeting { color: #ccc; font-size: 15px; line-height: 1.6; margin-bottom: 24px; }
     .details-box { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
     .details-box h3 { color: #fff; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 16px; }
-    .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #222; }
-    .detail-row:last-child { border-bottom: none; }
-    .detail-label { color: #888; font-size: 13px; }
-    .detail-value { color: #fff; font-size: 13px; font-weight: 500; text-align: right; }
+    .detail-table { width: 100%; border-collapse: collapse; }
+    .detail-row td { padding: 8px 0; border-bottom: 1px solid #222; vertical-align: top; }
+    .detail-row:last-child td { border-bottom: none; }
+    .detail-label { color: #888; font-size: 13px; width: 50%; }
+    .detail-value { color: #fff; font-size: 13px; font-weight: 500; text-align: right; width: 50%; }
     .highlight-box { background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1px solid #2a2a4a; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; text-align: center; }
     .highlight-box .date { color: #7c8aff; font-size: 18px; font-weight: 600; }
     .highlight-box .label { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
@@ -78,34 +79,36 @@ function buildConfirmationEmail(data: ContactFormData): string {
 
       <div class="details-box">
         <h3>Your Submission Summary</h3>
-        <div class="detail-row">
-          <span class="detail-label">Industry</span>
-          <span class="detail-value">${data.businessIndustry}</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Years in Business</span>
-          <span class="detail-value">${data.yearsInBusiness}</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Monthly Revenue</span>
-          <span class="detail-value">₹${data.lastMonthRevenue}</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Marketing Spend</span>
-          <span class="detail-value">₹${data.monthlyMarketingSpend}</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Monthly Customers</span>
-          <span class="detail-value">${data.monthlyCustomers}</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Main Customer Source</span>
-          <span class="detail-value">${data.mainCustomerSource}</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Sales Systems</span>
-          <span class="detail-value">${data.salesSystem.join(", ")}</span>
-        </div>
+        <table class="detail-table">
+          <tr class="detail-row">
+            <td class="detail-label">Industry</td>
+            <td class="detail-value">${data.businessIndustry}</td>
+          </tr>
+          <tr class="detail-row">
+            <td class="detail-label">Years in Business</td>
+            <td class="detail-value">${data.yearsInBusiness}</td>
+          </tr>
+          <tr class="detail-row">
+            <td class="detail-label">Monthly Revenue</td>
+            <td class="detail-value">₹${data.lastMonthRevenue}</td>
+          </tr>
+          <tr class="detail-row">
+            <td class="detail-label">Marketing Spend</td>
+            <td class="detail-value">₹${data.monthlyMarketingSpend}</td>
+          </tr>
+          <tr class="detail-row">
+            <td class="detail-label">Monthly Customers</td>
+            <td class="detail-value">${data.monthlyCustomers}</td>
+          </tr>
+          <tr class="detail-row">
+            <td class="detail-label">Main Customer Source</td>
+            <td class="detail-value">${data.mainCustomerSource}</td>
+          </tr>
+          <tr class="detail-row">
+            <td class="detail-label">Sales Systems</td>
+            <td class="detail-value">${data.salesSystem.join(", ")}</td>
+          </tr>
+        </table>
       </div>
 
       <p class="note">
@@ -121,14 +124,34 @@ function buildConfirmationEmail(data: ContactFormData): string {
 </html>`;
 }
 
+function normalizePhone(raw: string): number {
+  // Strip all spaces and non-digit characters except leading +
+  const stripped = raw.replace(/\s+/g, "").replace(/[^\d+]/g, "");
+
+  let digits: string;
+
+  if (stripped.startsWith("+91")) {
+    digits = "91" + stripped.slice(3);
+  } else if (stripped.startsWith("91") && stripped.length === 12) {
+    digits = stripped;
+  } else {
+    // Assume bare 10-digit number
+    digits = "91" + stripped.replace(/^\+/, "");
+  }
+
+  return Number(digits);
+}
+
 export async function submitContactForm(
   data: ContactFormData
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    const payload = { ...data, phone: normalizePhone(data.phone) };
+
     const response = await fetch(WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
