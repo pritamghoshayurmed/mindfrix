@@ -1,4 +1,3 @@
-import MetaPixel from "@/components/MetaPixel";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,9 +17,6 @@ export default function ThankYouLayout({
 }) {
   return (
     <>
-      <head>
-        <MetaPixel pixelId="942188141599836" />
-      </head>
       {children}
     </>
   );

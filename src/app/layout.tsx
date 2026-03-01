@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import Script from "next/script";
+import MetaPixel from "@/components/MetaPixel";
 
 const siteUrl = "https://www.mindfrix.com";
 
@@ -71,9 +72,7 @@ export const metadata: Metadata = {
     creator: "@mindfrix",
   },
   icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-    ],
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     shortcut: "/icon.svg",
     apple: "/mindfrix_logo.png",
   },
@@ -104,7 +103,8 @@ const organizationSchema = {
   ],
   offers: {
     "@type": "AggregateOffer",
-    description: "Custom web development, AI automation, and business systems services",
+    description:
+      "Custom web development, AI automation, and business systems services",
     offerCount: "4",
   },
 };
@@ -199,7 +199,9 @@ export default function RootLayout({
         <Script
           id="schema-organization"
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
         />
         <Script
           id="schema-website"
@@ -209,8 +211,11 @@ export default function RootLayout({
         <Script
           id="schema-local-business"
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusinessSchema),
+          }}
         />
+        <MetaPixel pixelId="942188141599836" />
       </head>
       <body>
         <SmoothScroll />
