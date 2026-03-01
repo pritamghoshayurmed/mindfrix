@@ -17,6 +17,6 @@ export default function ThankYouLayout({
   children: React.ReactNode;
 }) {
   return <>
-      <MetaPixel pixelId="1273490387964007" />
+      <MetaPixel pixelId="942188141599836" />
   {children}</>;
 }
