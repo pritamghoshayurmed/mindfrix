@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { submitContactForm } from "./actions";
-import MetaPixel from "@/components/MetaPixel";
 
 /* ─── Types ─── */
 interface FormData {
@@ -499,7 +498,6 @@ export default function ContactPage() {
 
   return (
     <main className="cp-page">
-      <MetaPixel pixelId="1273490387964007" />
       {/* Background effects */}
       <div className="cp-bg-orb cp-bg-orb-1" />
       <div className="cp-bg-orb cp-bg-orb-2" />

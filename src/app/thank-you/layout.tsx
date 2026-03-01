@@ -1,3 +1,4 @@
+import MetaPixel from "@/components/MetaPixel";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -15,5 +16,7 @@ export default function ThankYouLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <>
+      <MetaPixel pixelId="1273490387964007" />
+  {children}</>;
 }
